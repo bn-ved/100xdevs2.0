@@ -2,6 +2,6 @@
 .DS_Store
 node_modules/
 .eslintrc.js
-.eslintrc.yaml
+.eslintrc.yml
 package-lock.json
 package.json
