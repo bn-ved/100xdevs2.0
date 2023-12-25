@@ -4,7 +4,13 @@
  * the function should return a promise just like before
  */
 
+// Using setTimeout() to halt the processing for certain milliseconds.
 function sleep(milliseconds) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, milliseconds);
+  });
 }
 
 module.exports = sleep;
