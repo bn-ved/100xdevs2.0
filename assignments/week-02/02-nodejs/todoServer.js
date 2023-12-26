@@ -39,11 +39,62 @@
 
   Testing the server - run `npm run test-todoServer` command in terminal
  */
-  const express = require('express');
-  const bodyParser = require('body-parser');
-  
-  const app = express();
-  
-  app.use(bodyParser.json());
-  
-  module.exports = app;
+const express = require("express");
+const bodyParser = require("body-parser");
+
+const app = express();
+
+app.use(bodyParser.json());
+
+let todos = [];
+
+// 1. GET /todos - Retrieve all todo items
+app.get("/todos", (req, res) => {
+  res.send(todos);
+});
+
+// 2.GET /todos/:id - Retrieve a specific todo item by ID
+app.get("/todos/:id", (req, res) => {
+  const todo = todos.find((t) => t.id === parseInt(req.params.id));
+  if (!todo) {
+    res.status(404).send();
+  } else {
+    res.json(todo);
+  }
+});
+
+// 3. POST /todos - Create a new todo item
+app.post("/todos", (req, res) => {
+  const newTodo = {
+    id: Math.floor(Math.random() * 1000000), // unique random id
+    title: req.body.title,
+    description: req.body.description,
+  };
+  todos.push(newTodo);
+  res.status(201).json(newTodo);
+});
+
+// 4. PUT /todos/:id - Update an existing todo item by ID
+app.put("/todos/:id", (req, res) => {
+  const index = todos.findIndex((t) => t.id === parseInt(req.params.id));
+  if (index === -1) {
+    res.status(404).send();
+  } else {
+    todos[index].title = req.body.title;
+    todos[index].description = req.body.description;
+    res.json(todos[index]);
+  }
+});
+
+// 5. DELETE /todos/:id - Delete a todo item by ID
+app.delete("/todos/:id", (req, res) => {
+  const index = todos.findIndex((t) => t.id === parseInt(req.params.id));
+  if (index === -1) {
+    res.status(404).send();
+  } else {
+    todos.splice(index, 1);
+    res.status(200).send();
+  }
+});
+
+module.exports = app;
